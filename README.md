@@ -8,7 +8,11 @@ kintone のグローバルナビゲーションに独自のショートカット
 
 🚧 工事中 🚧
 
-##ボタンの追加方法
+Chrome ウェブストアにて拡張機能をインストールしてください。
+
+Chrome ウェブストア: [kintone GloNavi Anchor](https://chrome.google.com/webstore/detail/hogehogehoge)
+
+## ボタンの追加方法
 
 1. Chrome 拡張機能の kintone GloNavi Anchor の項目からオプションを開く
    ![オプションを開く](./resources/open_option.png)

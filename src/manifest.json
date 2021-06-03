@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "kintone GloNavi Anchor",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "homepage_url": "https://github.com/Kyome22/kintone-GloNavi-Anchor",
   "description": "kintoneのグローバルナビゲーションバーによく使うリンクのショートカットボタンを追加できるChrome拡張",
   "options_page": "option.html",
