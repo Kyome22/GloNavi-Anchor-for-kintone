@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>kintone GloNavi Anchor 拡張設定</title>
+    <link rel="stylesheet" type="text/css" href="css/option.css" />
+  </head>
+  <body>
+    <h1>kintone GloNavi Anchor 拡張設定</h1>
+    <div class="anchor-list-div">
+      <p class="title-p">ショートカットボタン一覧</p>
+      <p class="no-anchor-p">登録なし</p>
+      <ul class="anchor-list"></ul>
+    </div>
+    <div class="add-anchor-div">
+      <p>ボタンにしたい絵文字:</p>
+      <input
+        class="input-emoji"
+        type="text"
+        name="emoji"
+        placeholder="？"
+        spellcheck="false"
+      />
+      <p>ショートカットしたいURL:</p>
+      <input
+        class="input-url"
+        type="text"
+        name="url"
+        placeholder="https://から始まるリンクにしてください。"
+        spellcheck="false"
+      />
+      <p>ツールチップ:</p>
+      <input
+        class="input-tooltip"
+        type="text"
+        name="tooltip"
+        placeholder="ボタンの短い説明（任意）"
+        spellcheck="false"
+      />
+      <div class="switch-dev">
+        <p>新しいタブで開く:</p>
+        <label class="switch-label">
+          <input type="checkbox" class="switch-input" />
+          <span class="switch-content"></span>
+          <span class="switch-circle"></span>
+        </label>
+      </div>
+      <div class="add-button-div">
+        <button class="add-button">追加</button>
+      </div>
+    </div>
+    <script src="js/option.js"></script>
+  </body>
+</html>

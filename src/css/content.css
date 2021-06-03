@@ -1,0 +1,9 @@
+.emoji-anchor {
+  height: 48px;
+}
+
+.emoji-button {
+  color: transparent;
+  text-shadow: 0 0 0 #888888;
+  font-size: 24px;
+}
