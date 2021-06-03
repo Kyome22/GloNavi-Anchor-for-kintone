@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "kintone GloNavi Anchor",
   "version": "0.0.1",
-  "homepage_url": "https://github.dev.cybozu.co.jp/takuto-nakamura/kintone-glonavi-anchor",
+  "homepage_url": "https://github.com/Kyome22/kintone-GloNavi-Anchor",
   "description": "kintoneのグローバルナビゲーションバーによく使うリンクのショートカットボタンを追加できるChrome拡張",
   "options_page": "option.html",
   "permissions": ["storage"],
@@ -15,7 +15,14 @@
     {
       "js": ["js/content.js"],
       "css": ["css/content.css"],
-      "matches": ["https://bozuman.cybozu.com/*"]
+      "matches": [
+        "https://*.cybozu.com/k/*",
+        "https://*.cybozu-dev.com/k/*",
+        "https://*.kintone.com/k/*",
+        "https://*.kintone-dev.com/k/*",
+        "https://*.cybozu.cn/k/*",
+        "https://*.cybozu-dev.cn/k/*"
+      ]
     }
   ]
 }

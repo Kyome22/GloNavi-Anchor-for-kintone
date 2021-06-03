@@ -23,3 +23,8 @@ kintone のグローバルナビゲーションに独自のショートカット
 
 ## LICENSE
 
+[MIT](https://github.com/Kyome22/kintone-GloNavi-Anchor/blob/main/LICENSE)
+
+## 免責事項
+
+この OSS は、私個人の著作物であり、サイボウズ株式会社、その他、私の所属する組織とは一切関係ありません。
