@@ -1,4 +1,4 @@
-# kintone GloNavi Anchor
+# GloNavi Anchor for kintone
 
 kintone のグローバルナビゲーションに独自のショートカットボタンを追加できる Chrome 拡張です。
 
@@ -10,11 +10,11 @@ kintone のグローバルナビゲーションに独自のショートカット
 
 Chrome ウェブストアにて拡張機能をインストールしてください。
 
-Chrome ウェブストア: [kintone GloNavi Anchor](https://chrome.google.com/webstore/detail/hogehogehoge)
+Chrome ウェブストア: [GloNavi Anchor for kintone](https://chrome.google.com/webstore/detail/hogehogehoge)
 
 ## ボタンの追加方法
 
-1. Chrome 拡張機能の kintone GloNavi Anchor の項目からオプションを開く
+1. Chrome 拡張機能の GloNavi Anchor for kintone の項目からオプションを開く
    ![オプションを開く](./resources/open_option.png)
 
 2. ボタンにしたい絵文字、ショートカットしたい URL を入力して追加ボタンを押す
@@ -27,7 +27,7 @@ Chrome ウェブストア: [kintone GloNavi Anchor](https://chrome.google.com/we
 
 ## LICENSE
 
-[MIT](https://github.com/Kyome22/kintone-GloNavi-Anchor/blob/main/LICENSE)
+[MIT](https://github.com/Kyome22/GloNavi-Anchor-for-kintone/blob/main/LICENSE)
 
 ## 免責事項
 
