@@ -56,10 +56,10 @@ body {
 .anchor-grasp {
   position: absolute;
   z-index: 1;
-  width: 502px;
   cursor: grabbing;
   background-color: #36373b;
   box-shadow: 0 0 10px 2px #00000026;
+  box-sizing: border-box;
 }
 
 .grasp-area {

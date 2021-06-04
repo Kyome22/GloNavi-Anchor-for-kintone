@@ -128,6 +128,8 @@
 
     const clone = li.cloneNode(true);
     clone.classList.add("anchor-clone");
+
+    li.style.width = `${li.offsetWidth}px`;
     li.classList.add("anchor-grasp");
     li.insertAdjacentElement("afterend", clone);
 
