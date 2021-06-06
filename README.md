@@ -6,11 +6,9 @@ kintone のグローバルナビゲーションに独自のショートカット
 
 ## 導入方法
 
-🚧 工事中 🚧
-
 Chrome ウェブストアにて拡張機能をインストールしてください。
 
-Chrome ウェブストア: [GloNavi Anchor for kintone](https://chrome.google.com/webstore/detail/hogehogehoge)
+➡️ [GloNavi Anchor for kintone](https://chrome.google.com/webstore/detail/glonavi-anchor-for-kinton/gjniipeclimojedklghnfjfioklgfllc?hl=ja)
 
 ## ボタンの追加方法
 
