@@ -106,7 +106,7 @@
       return;
     }
     if (inputUrl.value.match(/^https?:\/\/[^\/\.]+.*/i) == null) {
-      window.alert(`${inputUrl.value}\nはURLとして不正です。`);
+      window.alert("https:// または http:// で始まるURLを入力してください。");
       return;
     }
     const anchor = {
