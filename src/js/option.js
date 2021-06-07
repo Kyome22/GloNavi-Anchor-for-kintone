@@ -105,7 +105,7 @@
       window.alert("絵文字は一文字にしてください。");
       return;
     }
-    if (inputUrl.value.match(/(http[s]?|ftp):\/\/[^\/\.]+?\..+\w$/i) == null) {
+    if (inputUrl.value.match(/^https?:\/\/[^\/\.]+.*/i) == null) {
       window.alert(`${inputUrl.value}\nはURLとして不正です。`);
       return;
     }
