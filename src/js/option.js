@@ -124,7 +124,9 @@
     e.preventDefault();
     const li = e.target.parentElement;
     sortData.li = li;
-    sortData.diffY = e.pageY - li.getBoundingClientRect().top;
+    const ulTop = ul.getBoundingClientRect().top;
+    const liTop = li.getBoundingClientRect().top;
+    sortData.diffY = e.pageY + ulTop - liTop;
 
     const clone = li.cloneNode(true);
     clone.classList.add("anchor-clone");
