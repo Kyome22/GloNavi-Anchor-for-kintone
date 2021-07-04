@@ -14,13 +14,17 @@
     </div>
     <div class="add-anchor-div">
       <p>ボタンにしたい絵文字:</p>
-      <input
-        class="input-emoji"
-        type="text"
-        name="emoji"
-        placeholder="？"
-        spellcheck="false"
-      />
+      <div class="emoji-dev">
+        <input
+          class="input-emoji"
+          type="text"
+          name="emoji"
+          placeholder="？"
+          spellcheck="false"
+        />
+        <p class="arrow">➡︎</p>
+        <p class="emoji-preview">?</p>
+      </div>
       <p>ショートカットしたいURL:</p>
       <input
         class="input-url"
@@ -37,14 +41,15 @@
         placeholder="ボタンの短い説明（任意）"
         spellcheck="false"
       />
-      <div class="switch-dev">
-        <p>新しいタブで開く:</p>
-        <label class="switch-label">
-          <input type="checkbox" class="switch-input" />
-          <span class="switch-content"></span>
-          <span class="switch-circle"></span>
-        </label>
-      </div>
+      <p>ページの開き方:</p>
+      <label class="radio-label">
+        <input type="radio" name="open-page" value="currenttab" checked />
+        <span class="radio-text">現在のタブ</span>
+      </label>
+      <label class="radio-label">
+        <input type="radio" name="open-page" value="newtab" class="newtab" />
+        <span class="radio-text">新しいタブ</span>
+      </label>
       <div class="add-button-div">
         <button class="add-button">追加</button>
       </div>

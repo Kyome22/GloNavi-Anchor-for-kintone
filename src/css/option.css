@@ -24,6 +24,7 @@ body {
 }
 
 .no-anchor-p {
+  margin-left: 8px;
   margin-bottom: 0;
   color: #a9adb3;
 }
@@ -119,6 +120,13 @@ body {
   margin-top: 0;
 }
 
+.emoji-dev {
+  margin-left: 8px;
+  display: inline-flex;
+  align-items: center;
+  height: 80px;
+}
+
 .input-emoji {
   padding: 8px 8px;
   width: 56px;
@@ -128,15 +136,38 @@ body {
   border-radius: 4px;
 }
 
+.arrow {
+  margin-left: 16px;
+  margin-right: 16px;
+  font-size: 32px;
+  color: #888888;
+}
+
+.emoji-preview {
+  padding: 8px 8px;
+  width: 56px;
+  height: 56px;
+  color: transparent;
+  text-shadow: 0 0 0 #888888;
+  font-size: 48px;
+  line-height: 56px;
+  text-align: center;
+  user-select: none;
+  border: 2px solid #72767b;
+  border-radius: 4px;
+}
+
 .input-url {
+  margin-left: 8px;
   padding: 4px 8px;
   font-size: 16px;
-  width: 100%;
+  width: calc(100% - 8px);
   box-sizing: border-box;
   border-radius: 4px;
 }
 
 .input-tooltip {
+  margin-left: 8px;
   padding: 4px 8px;
   font-size: 16px;
   width: 50%;
@@ -144,59 +175,39 @@ body {
   border-radius: 4px;
 }
 
-.switch-dev {
-  margin: 16px 0;
-  display: flex;
-  align-items: center;
-}
-
-.switch-dev p {
-  margin: 0;
-}
-
-.switch-label {
-  margin: 0 0 0 8px;
-  width: 40px;
-  height: 20px;
-  position: relative;
+.radio-label {
   display: block;
-  cursor: pointer;
 }
 
-.switch-input {
+input[type="radio"] {
   display: none;
 }
 
-.switch-content {
-  display: block;
-  position: absolute;
-  top: 4px;
-  left: 0px;
-  width: 40px;
-  border-radius: 6px;
-  height: 12px;
-  background-color: #abafb4;
+.radio-text:before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-left: 8px;
+  margin-right: 6px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 50%;
+  padding: 2px;
+  background-clip: content-box;
 }
 
-.switch-circle {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  background-color: #f1f1f1;
-  transition: all 0.2s;
+input[type="radio"]:not(:checked) + .radio-text:before {
+  border-color: #888888;
 }
 
-.switch-input:checked ~ .switch-circle {
-  left: 20px;
-  background-color: #9ac2fa;
+input[type="radio"]:checked + .radio-text {
+  color: #97c1fc;
 }
 
-.switch-input:checked ~ .switch-content {
-  background-color: #6b82a2;
+input[type="radio"]:checked + .radio-text:before {
+  border-color: #97c1fc;
+  background-color: #97c1fc;
 }
 
 .add-button-div {

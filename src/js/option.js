@@ -88,7 +88,6 @@
     if (anchor.newtab) {
       li.classList.add("newtab");
     }
-
     return li;
   };
 
@@ -96,7 +95,7 @@
     const inputEmoji = document.querySelector(".input-emoji");
     const inputUrl = document.querySelector(".input-url");
     const inputTooltip = document.querySelector(".input-tooltip");
-    const inputSwitch = document.querySelector(".switch-input");
+    const inputNewTab = document.querySelector(".newtab");
     if (inputEmoji.value === "" || inputUrl.value === "") {
       window.alert("絵文字とURLは必須です。");
       return;
@@ -113,10 +112,22 @@
       emoji: inputEmoji.value,
       url: inputUrl.value,
       tooltip: inputTooltip.value,
-      newtab: inputSwitch.checked,
+      newtab: inputNewTab.checked,
     };
     ul.appendChild(makeAnchorItem(anchor));
     saveAnchors();
+  };
+
+  const observeEmojiInput = () => {
+    const emojiPreview = document.querySelector(".emoji-preview");
+    const inputEmoji = document.querySelector(".input-emoji");
+    inputEmoji.addEventListener("input", (e) => {
+      if (inputEmoji.scrollWidth <= inputEmoji.clientWidth) {
+        emojiPreview.innerText = inputEmoji.value;
+      } else {
+        emojiPreview.innerText = "?";
+      }
+    });
   };
 
   // Drag & Drop Sort
@@ -177,8 +188,11 @@
     window.removeEventListener("mouseup", mouseUp);
   };
 
-  document.addEventListener("DOMContentLoaded", restoreAnchors);
-  document
-    .querySelector(".add-button")
-    .addEventListener("click", addAnchorItem);
+  document.addEventListener("DOMContentLoaded", () => {
+    restoreAnchors();
+    document
+      .querySelector(".add-button")
+      .addEventListener("click", addAnchorItem);
+    observeEmojiInput();
+  });
 })();
