@@ -24,10 +24,17 @@
   const currentAnchors = () => {
     let items = Array.from(document.querySelectorAll(".anchor-item"));
     return items.map((item) => {
+      const aEmoji = item.querySelector(".anchor-emoji");
+      const emoji = aEmoji == null ? null : aEmoji.innerText;
+
+      const aImage = item.querySelector(".anchor-image");
+      const image = aImage == null ? null : aImage.src;
+
       return {
-        emoji: item.querySelector(".anchor-emoji").innerText,
+        emoji: emoji,
+        image: image,
         url: item.querySelector(".anchor-url").innerText,
-        tooltip: item.querySelector(".anchor-emoji").title,
+        tooltip: item.getAttribute("tooltip"),
         newtab: item.classList.contains("newtab"),
       };
     });
@@ -35,7 +42,6 @@
 
   const restoreAnchors = () => {
     chrome.storage.sync.get({ anchors: [] }, function (options) {
-      console.log(options.anchors);
       updateHidden(options.anchors);
       while (ul.firstChild) {
         ul.removeChild(ul.firstChild);
@@ -48,6 +54,7 @@
 
   const saveAnchors = () => {
     const anchors = currentAnchors();
+    console.dir(anchors, { depth: null });
     chrome.storage.sync.set({ anchors: anchors }, function () {
       updateHidden(anchors);
     });
@@ -60,57 +67,100 @@
   }
 
   const makeAnchorItem = (anchor) => {
+    const li = document.createElement("li");
+    li.className = "anchor-item";
+    li.setAttribute("tooltip", anchor.tooltip);
+
     const imgGrasp = document.createElement("img");
     imgGrasp.className = "grasp-area";
     imgGrasp.src = "images/grasp.svg";
     imgGrasp.addEventListener("mousedown", mouseDown);
+    li.appendChild(imgGrasp);
 
-    const pEmoji = document.createElement("p");
-    pEmoji.className = "anchor-emoji";
-    pEmoji.innerText = anchor.emoji;
-    pEmoji.title = anchor.tooltip;
+    if (anchor.emoji) {
+      const spanEmoji = document.createElement("span");
+      spanEmoji.className = "anchor-emoji";
+      spanEmoji.innerText = anchor.emoji;
+      spanEmoji.title = anchor.tooltip;
+      li.appendChild(spanEmoji);
+    }
 
-    const pUrl = document.createElement("p");
-    pUrl.className = "anchor-url";
-    pUrl.innerText = anchor.url;
+    if (anchor.image) {
+      const imgImage = document.createElement("img");
+      imgImage.className = "anchor-image";
+      imgImage.src = anchor.image;
+      imgImage.title = anchor.tooltip;
+      li.appendChild(imgImage);
+    }
+
+    const pURL = document.createElement("p");
+    pURL.className = "anchor-url";
+    pURL.innerText = anchor.url;
+    li.appendChild(pURL);
 
     const btnDelete = document.createElement("button");
     btnDelete.className = "delete-button";
     btnDelete.innerText = "削除";
     btnDelete.addEventListener("click", removeAnchorItem);
-
-    const li = document.createElement("li");
-    li.className = "anchor-item";
-    li.appendChild(imgGrasp);
-    li.appendChild(pEmoji);
-    li.appendChild(pUrl);
     li.appendChild(btnDelete);
+
     if (anchor.newtab) {
       li.classList.add("newtab");
     }
     return li;
   };
 
-  const addAnchorItem = () => {
+  const readAsDataURL = (blob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = () => {
+        reject(reader.error);
+      };
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  const addAnchorItem = async () => {
+    const emojiDiv = document.querySelector(".emoji-div");
     const inputEmoji = document.querySelector(".input-emoji");
-    const inputUrl = document.querySelector(".input-url");
+    let emoji = null;
+    if (emojiDiv.style.display == "") {
+      if (inputEmoji.value === "") {
+        throw new Error("絵文字を入力してください。");
+      } else if (inputEmoji.clientWidth < inputEmoji.scrollWidth) {
+        throw new Error("絵文字は一文字にしてください。");
+      }
+      emoji = inputEmoji.value;
+    }
+
+    const imageDiv = document.querySelector(".image-div");
+    const inputImage = document.querySelector(".input-image");
+    let image = null;
+    if (imageDiv.style.display == "") {
+      if (inputImage.files.length == 0) {
+        throw new Error("画像を選択してください。");
+      }
+      const blobURL = URL.createObjectURL(inputImage.files[0]);
+      const resizedBlob = await resize(blobURL);
+      image = await readAsDataURL(resizedBlob);
+    }
+
+    const inputURL = document.querySelector(".input-url");
+    if (inputURL.value === "") {
+      throw new Error("URLを入力してください。");
+    } else if (inputURL.value.match(/^https?:\/\/[^\/\.]+.*/i) == null) {
+      throw new Error("https://で始まるURLを入力してください。");
+    }
+
     const inputTooltip = document.querySelector(".input-tooltip");
     const inputNewTab = document.querySelector(".newtab");
-    if (inputEmoji.value === "" || inputUrl.value === "") {
-      window.alert("絵文字とURLは必須です。");
-      return;
-    }
-    if (inputEmoji.clientWidth < inputEmoji.scrollWidth) {
-      window.alert("絵文字は一文字にしてください。");
-      return;
-    }
-    if (inputUrl.value.match(/^https?:\/\/[^\/\.]+.*/i) == null) {
-      window.alert("https:// または http:// で始まるURLを入力してください。");
-      return;
-    }
     const anchor = {
-      emoji: inputEmoji.value,
-      url: inputUrl.value,
+      emoji: emoji,
+      image: image,
+      url: inputURL.value,
       tooltip: inputTooltip.value,
       newtab: inputNewTab.checked,
     };
@@ -118,16 +168,38 @@
     saveAnchors();
   };
 
+  const observeSymbolRadio = () => {
+    document.querySelector(".image-div").style.display = "none";
+    const radios = document.getElementsByName("anchor-symbol");
+    for (const radio of radios) {
+      radio.addEventListener("change", function (e) {
+        const emojiDisplay = e.target.value == "emoji" ? "" : "none";
+        const imageDisplay = e.target.value == "image" ? "" : "none";
+        document.querySelector(".emoji-div").style.display = emojiDisplay;
+        document.querySelector(".image-div").style.display = imageDisplay;
+      });
+    }
+  };
+
   const observeEmojiInput = () => {
     const emojiPreview = document.querySelector(".emoji-preview");
     const inputEmoji = document.querySelector(".input-emoji");
-    inputEmoji.addEventListener("input", (e) => {
+    inputEmoji.addEventListener("input", () => {
       if (inputEmoji.scrollWidth <= inputEmoji.clientWidth) {
         emojiPreview.innerText = inputEmoji.value;
       } else {
         emojiPreview.innerText = "?";
       }
     });
+  };
+
+  const observeImageInput = () => {
+    document
+      .querySelector(".input-image")
+      .addEventListener("change", function (e) {
+        const blobURL = URL.createObjectURL(e.target.files[0]);
+        document.querySelector(".image-preview").src = blobURL;
+      });
   };
 
   // Drag & Drop Sort
@@ -188,11 +260,42 @@
     window.removeEventListener("mouseup", mouseUp);
   };
 
+  // resize image
+  const resize = (blobURL) => {
+    return new Promise(function (resolve) {
+      const image = new Image();
+      image.onload = () => {
+        let w = image.width;
+        let h = image.height;
+        if (w < h) {
+          w = (24 * w) / h;
+          h = 24;
+        } else {
+          h = (24 * h) / w;
+          w = 24;
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = 24;
+        canvas.height = 24;
+        let context = canvas.getContext("2d");
+        context.drawImage(image, (24 - w) / 2, (24 - h) / 2, w, h);
+        context.canvas.toBlob((blob) => {
+          resolve(blob);
+        });
+      };
+      image.src = blobURL;
+    });
+  };
+
   document.addEventListener("DOMContentLoaded", () => {
     restoreAnchors();
-    document
-      .querySelector(".add-button")
-      .addEventListener("click", addAnchorItem);
+    document.querySelector(".add-button").addEventListener("click", () => {
+      addAnchorItem().catch((error) => {
+        window.alert(error);
+      });
+    });
+    observeSymbolRadio();
     observeEmojiInput();
+    observeImageInput();
   });
 })();

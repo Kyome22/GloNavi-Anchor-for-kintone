@@ -2,15 +2,26 @@
   "use strict";
 
   const makeButton = (anchor) => {
-    const p = document.createElement("sppan");
-    p.className = "emoji-button";
-    p.innerText = anchor.emoji;
-    p.title = anchor.tooltip;
-
     const a = document.createElement("a");
-    a.className = "gaia-header-img emoji-anchor";
+
+    if (anchor.emoji) {
+      const span = document.createElement("span");
+      span.className = "glonavi-emoji-button";
+      span.innerText = anchor.emoji;
+      span.title = anchor.tooltip;
+      a.appendChild(span);
+    }
+
+    if (anchor.image) {
+      const img = document.createElement("img");
+      img.className = "glonavi-image-button";
+      img.src = anchor.image;
+      img.title = anchor.tooltip;
+      a.appendChild(img);
+    }
+
+    a.className = "gaia-header-img glonavi-symbol-anchor";
     a.href = anchor.url;
-    a.appendChild(p);
     if (anchor.newtab) {
       a.setAttribute("target", "_blank");
       a.setAttribute("rel", "noopener noreferrer");

@@ -3,8 +3,10 @@ body {
   background-color: #2a2c2f;
   color: white;
   font-size: 16px;
+  font-family: sans-serif;
 }
 
+/* anchor list */
 .hidden {
   display: none;
 }
@@ -76,14 +78,23 @@ body {
 }
 
 .anchor-emoji {
-  width: 32px;
-  height: 32px;
-  color: transparent;
-  text-shadow: 0 0 0 #888888;
+  margin: 4px;
+  width: 24px;
+  height: 24px;
   font-size: 24px;
-  line-height: 32px;
+  line-height: 24px;
   text-align: center;
   user-select: none;
+  color: transparent;
+  text-shadow: 0 0 0 #888888;
+}
+
+.anchor-image {
+  margin: 4px;
+  width: 24px;
+  height: 24px;
+  user-select: none;
+  filter: brightness(0) invert() brightness(0.534);
 }
 
 .anchor-url {
@@ -120,9 +131,43 @@ body {
   margin-top: 0;
 }
 
-.emoji-dev {
+/* radio button */
+input[type="radio"] {
+  display: none;
+}
+
+.radio-text:before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
   margin-left: 8px;
-  display: inline-flex;
+  margin-right: 6px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 50%;
+  padding: 2px;
+  background-clip: content-box;
+}
+
+input[type="radio"]:not(:checked) + .radio-text:before {
+  border-color: #888888;
+}
+
+input[type="radio"]:checked + .radio-text {
+  color: #97c1fc;
+}
+
+input[type="radio"]:checked + .radio-text:before {
+  border-color: #97c1fc;
+  background-color: #97c1fc;
+}
+
+/* input emoji */
+.emoji-div {
+  margin-top: 8px;
+  margin-left: 8px;
+  display: flex;
   align-items: center;
   height: 80px;
 }
@@ -157,6 +202,27 @@ body {
   border-radius: 4px;
 }
 
+/* input image */
+.image-div {
+  margin-top: 8px;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  height: 80px;
+}
+
+.image-preview {
+  padding: 8px 8px;
+  width: 56px;
+  height: 56px;
+  user-select: none;
+  border: 2px solid #72767b;
+  border-radius: 4px;
+  object-fit: contain;
+  filter: brightness(0) invert() brightness(0.534);
+}
+
+/* input url */
 .input-url {
   margin-left: 8px;
   padding: 4px 8px;
@@ -166,6 +232,7 @@ body {
   border-radius: 4px;
 }
 
+/* input tooltip */
 .input-tooltip {
   margin-left: 8px;
   padding: 4px 8px;
@@ -175,41 +242,7 @@ body {
   border-radius: 4px;
 }
 
-.radio-label {
-  display: block;
-}
-
-input[type="radio"] {
-  display: none;
-}
-
-.radio-text:before {
-  content: "";
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  margin-left: 8px;
-  margin-right: 6px;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 50%;
-  padding: 2px;
-  background-clip: content-box;
-}
-
-input[type="radio"]:not(:checked) + .radio-text:before {
-  border-color: #888888;
-}
-
-input[type="radio"]:checked + .radio-text {
-  color: #97c1fc;
-}
-
-input[type="radio"]:checked + .radio-text:before {
-  border-color: #97c1fc;
-  background-color: #97c1fc;
-}
-
+/* add anchor button */
 .add-button-div {
   margin-top: 12px;
   width: 100%;

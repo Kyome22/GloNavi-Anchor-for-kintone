@@ -1,9 +1,15 @@
-.emoji-anchor {
+.glonavi-symbol-anchor {
   height: 48px;
 }
 
-.emoji-button {
+.glonavi-emoji-button {
   color: transparent;
   text-shadow: 0 0 0 #888888;
   font-size: 24px;
+}
+
+.glonavi-image-button {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert() brightness(0.534);
 }
