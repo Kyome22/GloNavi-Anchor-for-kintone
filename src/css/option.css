@@ -131,6 +131,11 @@ body {
   margin-top: 0;
 }
 
+.sub-title {
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+
 /* radio button */
 input[type="radio"] {
   display: none;

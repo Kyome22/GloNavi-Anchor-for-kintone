@@ -2,6 +2,7 @@
   "use strict";
 
   const makeButton = (anchor) => {
+    const li = document.createElement("li");
     const a = document.createElement("a");
 
     if (anchor.emoji) {
@@ -27,7 +28,6 @@
       a.setAttribute("rel", "noopener noreferrer");
     }
 
-    const li = document.createElement("li");
     li.appendChild(a);
     return li;
   };

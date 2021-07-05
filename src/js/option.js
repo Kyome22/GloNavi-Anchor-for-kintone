@@ -54,7 +54,6 @@
 
   const saveAnchors = () => {
     const anchors = currentAnchors();
-    console.dir(anchors, { depth: null });
     chrome.storage.sync.set({ anchors: anchors }, function () {
       updateHidden(anchors);
     });
@@ -69,6 +68,11 @@
   const makeAnchorItem = (anchor) => {
     const li = document.createElement("li");
     li.className = "anchor-item";
+    let note = anchor.tooltip;
+    if (anchor.newtab) {
+      li.classList.add("newtab");
+      note += "（新規タブ）";
+    }
     li.setAttribute("tooltip", anchor.tooltip);
 
     const imgGrasp = document.createElement("img");
@@ -81,7 +85,7 @@
       const spanEmoji = document.createElement("span");
       spanEmoji.className = "anchor-emoji";
       spanEmoji.innerText = anchor.emoji;
-      spanEmoji.title = anchor.tooltip;
+      spanEmoji.title = note;
       li.appendChild(spanEmoji);
     }
 
@@ -89,7 +93,7 @@
       const imgImage = document.createElement("img");
       imgImage.className = "anchor-image";
       imgImage.src = anchor.image;
-      imgImage.title = anchor.tooltip;
+      imgImage.title = note;
       li.appendChild(imgImage);
     }
 
@@ -104,9 +108,6 @@
     btnDelete.addEventListener("click", removeAnchorItem);
     li.appendChild(btnDelete);
 
-    if (anchor.newtab) {
-      li.classList.add("newtab");
-    }
     return li;
   };
 
@@ -156,7 +157,7 @@
     }
 
     const inputTooltip = document.querySelector(".input-tooltip");
-    const inputNewTab = document.querySelector(".newtab");
+    const inputNewTab = document.querySelector(".newtab-radio");
     const anchor = {
       emoji: emoji,
       image: image,
@@ -185,7 +186,10 @@
     const emojiPreview = document.querySelector(".emoji-preview");
     const inputEmoji = document.querySelector(".input-emoji");
     inputEmoji.addEventListener("input", () => {
-      if (inputEmoji.scrollWidth <= inputEmoji.clientWidth) {
+      if (
+        0 < inputEmoji.value.length &&
+        inputEmoji.scrollWidth <= inputEmoji.clientWidth
+      ) {
         emojiPreview.innerText = inputEmoji.value;
       } else {
         emojiPreview.innerText = "?";
@@ -197,8 +201,12 @@
     document
       .querySelector(".input-image")
       .addEventListener("change", function (e) {
-        const blobURL = URL.createObjectURL(e.target.files[0]);
-        document.querySelector(".image-preview").src = blobURL;
+        if (0 < e.target.files.length) {
+          const blobURL = URL.createObjectURL(e.target.files[0]);
+          document.querySelector(".image-preview").src = blobURL;
+        } else {
+          document.querySelector(".image-preview").src = "images/question.png";
+        }
       });
   };
 

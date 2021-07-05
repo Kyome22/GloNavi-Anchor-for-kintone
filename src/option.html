@@ -13,7 +13,7 @@
       <ul class="anchor-list"></ul>
     </div>
     <div class="add-anchor-div">
-      <p>ボタンにしたいシンボル:</p>
+      <p class="sub-title">ボタンにしたいシンボル</p>
       <label class="radio-label">
         <input type="radio" name="anchor-symbol" value="emoji" checked />
         <span class="radio-text">絵文字</span>
@@ -38,7 +38,7 @@
         <p class="arrow">➡︎</p>
         <img class="image-preview" src="images/question.png" />
       </div>
-      <p>ショートカットしたいURL:</p>
+      <p class="sub-title">ショートカットしたいページのURL</p>
       <input
         class="input-url"
         type="text"
@@ -46,7 +46,7 @@
         placeholder="https://から始まるリンクにしてください。"
         spellcheck="false"
       />
-      <p>ツールチップ:</p>
+      <p class="sub-title">ツールチップ</p>
       <input
         class="input-tooltip"
         type="text"
@@ -54,13 +54,18 @@
         placeholder="ボタンの短い説明（任意）"
         spellcheck="false"
       />
-      <p>ページの開き方:</p>
+      <p class="sub-title">ページの開き方</p>
       <label class="radio-label">
         <input type="radio" name="open-page" value="currenttab" checked />
         <span class="radio-text">現在のタブ</span>
       </label>
       <label class="radio-label">
-        <input type="radio" name="open-page" value="newtab" class="newtab" />
+        <input
+          class="newtab-radio"
+          type="radio"
+          name="open-page"
+          value="newtab"
+        />
         <span class="radio-text">新しいタブ</span>
       </label>
       <div class="add-button-div">
