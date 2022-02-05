@@ -1,0 +1,28 @@
+{
+  "description": {
+    "message": "This is a Chrome extension that allows you to add your own shortcut buttons to kintone's global navigation."
+  },
+  "title": { "message": "GloNavi Anchor for kintone - Preferences" },
+  "list_of_shortcuts": { "message": "List of shortcut buttons" },
+  "no_anchor": { "message": "No items registered" },
+  "symbol_of_button": { "message": "Symbol of the button" },
+  "emoji": { "message": "Emoji" },
+  "image": { "message": "Image (PNG)" },
+  "shortcut_url": { "message": "URL of the page you want to shortcut" },
+  "url_placeholder": { "message": "The link should begin with https://." },
+  "tooltip": { "message": "Tooltip" },
+  "tooltip_placeholder": {
+    "message": "Short description of the button (optional)"
+  },
+  "how_to_open": { "message": "How to open the page" },
+  "current_tab": { "message": "Current Tab" },
+  "new_tab": { "message": "New Tab" },
+  "append_button": { "message": "Append" },
+  "new_tab_paren": { "message": " (new tab)" },
+  "delete": { "message": "Delete" },
+  "error1": { "message": "Enter an Emoji." },
+  "error2": { "message": "Use only one Emoji." },
+  "error3": { "message": "Select an image" },
+  "error4": { "message": "Enter a URL" },
+  "error5": { "message": "Enter a URL that begins with https://." }
+}

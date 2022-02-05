@@ -1,6 +1,8 @@
 (() => {
   "use strict";
 
+  const localize = chrome.i18n.getMessage;
+
   let sortData = {
     li: null,
     diffY: 0,
@@ -71,7 +73,7 @@
     let note = anchor.tooltip;
     if (anchor.newtab) {
       li.classList.add("newtab");
-      note += "（新規タブ）";
+      note += localize("new_tab_paren");
     }
     li.setAttribute("tooltip", anchor.tooltip);
 
@@ -104,7 +106,7 @@
 
     const btnDelete = document.createElement("button");
     btnDelete.className = "delete-button";
-    btnDelete.innerText = "削除";
+    btnDelete.innerText = localize("delete");
     btnDelete.addEventListener("click", removeAnchorItem);
     li.appendChild(btnDelete);
 
@@ -130,9 +132,9 @@
     let emoji = null;
     if (emojiDiv.style.display == "") {
       if (inputEmoji.value === "") {
-        throw new Error("絵文字を入力してください。");
+        throw new Error(localize("error1"));
       } else if (inputEmoji.clientWidth < inputEmoji.scrollWidth) {
-        throw new Error("絵文字は一文字にしてください。");
+        throw new Error(localize("error2"));
       }
       emoji = inputEmoji.value;
     }
@@ -142,7 +144,7 @@
     let image = null;
     if (imageDiv.style.display == "") {
       if (inputImage.files.length == 0) {
-        throw new Error("画像を選択してください。");
+        throw new Error(localize("error3"));
       }
       const blobURL = URL.createObjectURL(inputImage.files[0]);
       const resizedBlob = await resize(blobURL);
@@ -151,9 +153,9 @@
 
     const inputURL = document.querySelector(".input-url");
     if (inputURL.value === "") {
-      throw new Error("URLを入力してください。");
+      throw new Error(localize("error4"));
     } else if (inputURL.value.match(/^https?:\/\/[^\/\.]+.*/i) == null) {
-      throw new Error("https://で始まるURLを入力してください。");
+      throw new Error(localize("error5"));
     }
 
     const inputTooltip = document.querySelector(".input-tooltip");
@@ -295,9 +297,21 @@
     });
   };
 
+  const initialLocalizeHTML = () => {
+    document.querySelectorAll("[data-i18n-text]").forEach((element) => {
+      const key = element.getAttribute("data-i18n-text");
+      element.textContent = localize(key);
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+      const key = element.getAttribute("data-i18n-placeholder");
+      element.placeholder = localize(key);
+    });
+  };
+
   document.addEventListener("DOMContentLoaded", () => {
+    initialLocalizeHTML();
     restoreAnchors();
-    document.querySelector(".add-button").addEventListener("click", () => {
+    document.querySelector(".append-button").addEventListener("click", () => {
       addAnchorItem().catch((error) => {
         window.alert(error);
       });

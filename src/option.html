@@ -2,25 +2,25 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <title>GloNavi Anchor for kintone 拡張設定</title>
+    <title data-i18n-text="title"></title>
     <link rel="stylesheet" type="text/css" href="css/option.css" />
   </head>
   <body>
-    <h1>GloNavi Anchor for kintone 拡張設定</h1>
+    <h1 data-i18n-text="title"></h1>
     <div class="anchor-list-div">
-      <p class="title-p">ショートカットボタン一覧</p>
-      <p class="no-anchor-p">登録なし</p>
+      <p class="title-p" data-i18n-text="list_of_shortcuts"></p>
+      <p class="no-anchor-p" data-i18n-text="no_anchor"></p>
       <ul class="anchor-list"></ul>
     </div>
-    <div class="add-anchor-div">
-      <p class="sub-title">ボタンにしたいシンボル</p>
+    <div class="append-anchor-div">
+      <p class="sub-title" data-i18n-text="symbol_of_button"></p>
       <label class="radio-label">
         <input type="radio" name="anchor-symbol" value="emoji" checked />
-        <span class="radio-text">絵文字</span>
+        <span class="radio-text" data-i18n-text="emoji"></span>
       </label>
       <label class="radio-label">
         <input type="radio" name="anchor-symbol" value="image" />
-        <span class="radio-text">画像（PNG）</span>
+        <span class="radio-text" data-i18n-text="image"></span>
       </label>
       <div class="emoji-div">
         <input
@@ -38,26 +38,26 @@
         <p class="arrow">➡︎</p>
         <img class="image-preview" src="images/question.png" />
       </div>
-      <p class="sub-title">ショートカットしたいページのURL</p>
+      <p class="sub-title" data-i18n-text="shortcut_url"></p>
       <input
         class="input-url"
         type="text"
         name="url"
-        placeholder="https://から始まるリンクにしてください。"
         spellcheck="false"
+        data-i18n-placeholder="url_placeholder"
       />
-      <p class="sub-title">ツールチップ</p>
+      <p class="sub-title" data-i18n-text="tooltip"></p>
       <input
         class="input-tooltip"
         type="text"
         name="tooltip"
-        placeholder="ボタンの短い説明（任意）"
         spellcheck="false"
+        data-i18n-placeholder="tooltip_placeholder"
       />
-      <p class="sub-title">ページの開き方</p>
+      <p class="sub-title" data-i18n-text="how_to_open"></p>
       <label class="radio-label">
         <input type="radio" name="open-page" value="currenttab" checked />
-        <span class="radio-text">現在のタブ</span>
+        <span class="radio-text" data-i18n-text="current_tab"></span>
       </label>
       <label class="radio-label">
         <input
@@ -66,10 +66,10 @@
           name="open-page"
           value="newtab"
         />
-        <span class="radio-text">新しいタブ</span>
+        <span class="radio-text" data-i18n-text="new_tab"></span>
       </label>
-      <div class="add-button-div">
-        <button class="add-button">追加</button>
+      <div class="append-button-div">
+        <button class="append-button" data-i18n-text="append_button"></button>
       </div>
     </div>
     <script src="js/option.js"></script>

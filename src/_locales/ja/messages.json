@@ -1,0 +1,28 @@
+{
+  "description": {
+    "message": "kintone のグローバルナビゲーションに独自のショートカットボタンを追加できる Chrome 拡張です。"
+  },
+  "title": { "message": "GloNavi Anchor for kintone 拡張設定" },
+  "list_of_shortcuts": { "message": "ショートカットボタン一覧" },
+  "no_anchor": { "message": "登録なし" },
+  "symbol_of_button": { "message": "ボタンにしたいシンボル" },
+  "emoji": { "message": "絵文字" },
+  "image": { "message": "画像（PNG）" },
+  "shortcut_url": { "message": "ショートカットしたいページのURL" },
+  "url_placeholder": { "message": "https:// から始まるリンクにしてください。" },
+  "tooltip": { "message": "ツールチップ" },
+  "tooltip_placeholder": {
+    "message": "ボタンの短い説明（任意）"
+  },
+  "how_to_open": { "message": "ページの開き方" },
+  "current_tab": { "message": "現在のタブ" },
+  "new_tab": { "message": "新しいタブ" },
+  "append_button": { "message": "追加" },
+  "new_tab_paren": { "message": "（新規タブ）" },
+  "delete": { "message": "削除" },
+  "error1": { "message": "絵文字を入力してください。" },
+  "error2": { "message": "絵文字は一文字にしてください。" },
+  "error3": { "message": "画像を選択してください。" },
+  "error4": { "message": "URLを入力してください。" },
+  "error5": { "message": "https:// で始まるURLを入力してください。" }
+}
