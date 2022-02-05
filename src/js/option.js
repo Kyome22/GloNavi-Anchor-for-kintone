@@ -314,7 +314,7 @@
   const exportSettingsFile = async () => {
     const noAnchorP = document.querySelector(".no-anchor-p");
     if (noAnchorP.classList.contains("hidden") === false) {
-      throw new Error("エクスポートできる設定がありません。");
+      throw new Error(localize("error6"));
     }
     const anchors = currentAnchors();
     const json = JSON.stringify(anchors, null, 2);
@@ -353,7 +353,7 @@
     const content = await file.text();
     const json = JSON.parse(content);
     if (!jsonValidation(json)) {
-      throw new Error("このJSONファイルは読み込めません。");
+      throw new Error(localize("error7", [file.name]));
     }
     json.forEach((anchor) => {
       ul.appendChild(makeAnchorItem(anchor));

@@ -19,10 +19,20 @@
   "new_tab": { "message": "New Tab" },
   "append_button": { "message": "Append" },
   "new_tab_paren": { "message": " (new tab)" },
+  "settings": { "message": "Transfer of settings" },
+  "export_button": { "message": "Export current settings" },
+  "import_button": { "message": "Import settings from a file" },
   "delete": { "message": "Delete" },
   "error1": { "message": "Enter an Emoji." },
   "error2": { "message": "Use only one Emoji." },
   "error3": { "message": "Select an image" },
   "error4": { "message": "Enter a URL" },
-  "error5": { "message": "Enter a URL that begins with https://." }
+  "error5": { "message": "Enter a URL that begins with https://." },
+  "error6": { "message": "There are no exportable settings." },
+  "error7": {
+    "message": "Could not load $target$.",
+    "placeholders": {
+      "target": { "content": "$1" }
+    }
+  }
 }

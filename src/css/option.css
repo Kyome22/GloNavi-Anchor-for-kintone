@@ -284,7 +284,7 @@ input[type="radio"]:checked + .radio-text:before {
   display: inline-block;
   margin: 12px 0 0 8px;
   padding: 4px 16px;
-  min-width: 200px;
+  min-width: 160px;
   color: #97c1fc;
   background-color: transparent;
   border: 1px solid #72767b;
