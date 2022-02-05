@@ -20,13 +20,13 @@ Chrome ウェブストアにて拡張機能をインストールしてくださ�
 
 - **シンボルを絵文字にする場合**
 
-  ![必要項目の入力と追加](./resources/add_emoji_anchor.png)
+  ![必要項目の入力と追加](./resources/add_emoji_anchor_jp.png)
 
 - **シンボルを画像（PNG）にする場合**
 
-  ![必要項目の入力と追加](./resources/add_image_anchor.png)
-  
-  ※画像は縦横24pxの正方形に収まるようにリサイズされます。
+  ![必要項目の入力と追加](./resources/add_image_anchor_jp.png)
+
+  ※画像は縦横 24px の正方形に収まるようにリサイズされます。
 
 ## ボタンの並び替え
 
