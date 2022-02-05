@@ -19,10 +19,20 @@
   "new_tab": { "message": "新しいタブ" },
   "append_button": { "message": "追加" },
   "new_tab_paren": { "message": "（新規タブ）" },
+  "settings": { "message": "設定の引き継ぎ" },
+  "export_button": { "message": "現在の設定をエクスポート" },
+  "import_button": { "message": "ファイルから設定をインポート" },
   "delete": { "message": "削除" },
   "error1": { "message": "絵文字を入力してください。" },
   "error2": { "message": "絵文字は一文字にしてください。" },
   "error3": { "message": "画像を選択してください。" },
   "error4": { "message": "URLを入力してください。" },
-  "error5": { "message": "https:// で始まるURLを入力してください。" }
+  "error5": { "message": "https:// で始まるURLを入力してください。" },
+  "error6": { "message": "エクスポートできる設定がありません。" },
+  "error7": {
+    "message": "$target$ は読み込めませんでした。",
+    "placeholders": {
+      "target": { "content": "$1" }
+    }
+  }
 }

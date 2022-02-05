@@ -3,6 +3,17 @@
 
   const localize = chrome.i18n.getMessage;
 
+  const initialLocalizeHTML = () => {
+    document.querySelectorAll("[data-i18n-text]").forEach((element) => {
+      const key = element.getAttribute("data-i18n-text");
+      element.textContent = localize(key);
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+      const key = element.getAttribute("data-i18n-placeholder");
+      element.placeholder = localize(key);
+    });
+  };
+
   let sortData = {
     li: null,
     diffY: 0,
@@ -17,8 +28,10 @@
   const updateHidden = (anchors) => {
     const noAnchorP = document.querySelector(".no-anchor-p");
     if (anchors.length === 0) {
+      ul.classList.add("hidden");
       noAnchorP.classList.remove("hidden");
     } else {
+      ul.classList.remove("hidden");
       noAnchorP.classList.add("hidden");
     }
   };
@@ -297,27 +310,110 @@
     });
   };
 
-  const initialLocalizeHTML = () => {
-    document.querySelectorAll("[data-i18n-text]").forEach((element) => {
-      const key = element.getAttribute("data-i18n-text");
-      element.textContent = localize(key);
+  // Export/Import Settings File
+  const exportSettingsFile = async () => {
+    const noAnchorP = document.querySelector(".no-anchor-p");
+    if (noAnchorP.classList.contains("hidden") === false) {
+      throw new Error(localize("error6"));
+    }
+    const anchors = currentAnchors();
+    const json = JSON.stringify(anchors, null, 2);
+    const options = {
+      types: [
+        {
+          description: "GloNavi Anchor Settings File (JSON)",
+          accept: {
+            "application/json": [".json"],
+          },
+        },
+      ],
+      suggestedName: "glonavi_settings",
+    };
+    const fileHandle = await window.showSaveFilePicker(options);
+    const writable = await fileHandle.createWritable();
+    await writable.write(json);
+    await writable.close();
+  };
+
+  const importSettingsFile = async () => {
+    const options = {
+      types: [
+        {
+          description: "GloNavi Anchor Settings File (JSON)",
+          accept: {
+            "application/json": [".json"],
+          },
+        },
+      ],
+      excludeAcceptAllOption: true,
+      multiple: false,
+    };
+    const [fileHandle] = await window.showOpenFilePicker(options);
+    const file = await fileHandle.getFile();
+    const content = await file.text();
+    const json = JSON.parse(content);
+    if (!jsonValidation(json)) {
+      throw new Error(localize("error7", [file.name]));
+    }
+    json.forEach((anchor) => {
+      ul.appendChild(makeAnchorItem(anchor));
     });
-    document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
-      const key = element.getAttribute("data-i18n-placeholder");
-      element.placeholder = localize(key);
-    });
+    saveAnchors();
+  };
+
+  function isString(obj) {
+    return typeof obj === "string" || obj instanceof String;
+  }
+
+  const jsonValidation = (json) => {
+    if (!Array.isArray(json)) {
+      return false;
+    }
+    for (let obj of json) {
+      const keyCheck =
+        "emoji" in obj &&
+        "image" in obj &&
+        "url" in obj &&
+        "tooltip" in obj &&
+        "newtab" in obj;
+      if (!keyCheck) {
+        return false;
+      }
+      const emojiCheck = isString(obj["emoji"]);
+      const imageCheck = isString(obj["image"]);
+      if ((emojiCheck && imageCheck) || (!emojiCheck && !imageCheck)) {
+        return false;
+      }
+      if (!isString(obj["url"]) || !isString(obj["tooltip"])) {
+        return false;
+      }
+      if (!(typeof obj["newtab"] === "boolean")) {
+        return false;
+      }
+    }
+    return true;
   };
 
   document.addEventListener("DOMContentLoaded", () => {
     initialLocalizeHTML();
     restoreAnchors();
-    document.querySelector(".append-button").addEventListener("click", () => {
-      addAnchorItem().catch((error) => {
-        window.alert(error);
-      });
-    });
     observeSymbolRadio();
     observeEmojiInput();
     observeImageInput();
+    document.querySelector(".append-button").addEventListener("click", () => {
+      addAnchorItem().catch((error) => {
+        window.alert(error.message);
+      });
+    });
+    document.querySelector(".export-button").addEventListener("click", () => {
+      exportSettingsFile().catch((error) => {
+        window.alert(`Export Error ${error.message}`);
+      });
+    });
+    document.querySelector(".import-button").addEventListener("click", () => {
+      importSettingsFile().catch((error) => {
+        window.alert(`Import Error ${error.message}`);
+      });
+    });
   });
 })();
