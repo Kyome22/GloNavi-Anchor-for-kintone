@@ -366,9 +366,7 @@
   }
 
   const jsonValidation = (json) => {
-    console.dir(json, { depth: null });
     if (!Array.isArray(json)) {
-      console.log("arrayじゃない");
       return false;
     }
     for (let obj of json) {
@@ -379,21 +377,17 @@
         "tooltip" in obj &&
         "newtab" in obj;
       if (!keyCheck) {
-        console.log("キーが存在しない");
         return false;
       }
       const emojiCheck = isString(obj["emoji"]);
       const imageCheck = isString(obj["image"]);
       if ((emojiCheck && imageCheck) || (!emojiCheck && !imageCheck)) {
-        console.log("emojiとimageがダメ");
         return false;
       }
       if (!isString(obj["url"]) || !isString(obj["tooltip"])) {
-        console.log("urlとtooltipが文字列じゃない");
         return false;
       }
       if (!(typeof obj["newtab"] === "boolean")) {
-        console.log("newtabが真偽値じゃない");
         return false;
       }
     }
