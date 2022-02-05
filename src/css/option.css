@@ -6,33 +6,43 @@ body {
   font-family: sans-serif;
 }
 
+/* title p tag */
+.main-title-p {
+  margin: 20px 0 0;
+  font-size: 2em;
+}
+
+.first-title-p {
+  margin: 0;
+}
+
+.second-title-p {
+  margin: 20px 0 0;
+}
+
 /* anchor list */
 .hidden {
   display: none;
 }
 
 .anchor-list-div {
-  margin: 40px auto;
+  margin: 20px auto 0;
   padding: 12px;
   width: 500px;
+  min-height: 60px;
   text-align: left;
   background-color: #36373b;
   border-radius: 8px;
-  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.4);
-}
-
-.title-p {
-  margin-top: 0;
+  box-shadow: 0 0 10px 5px #00000060;
 }
 
 .no-anchor-p {
-  margin-left: 8px;
-  margin-bottom: 0;
+  margin: 16px 0 0 8px;
   color: #a9adb3;
 }
 
 .anchor-list {
-  margin: 0;
+  margin: 16px 0 0;
   padding-left: 0;
   position: relative;
 }
@@ -118,7 +128,7 @@ body {
 }
 
 .append-anchor-div {
-  margin: 16px auto;
+  margin: 20px auto 0;
   padding: 12px;
   width: 500px;
   text-align: left;
@@ -131,14 +141,14 @@ body {
   margin-top: 0;
 }
 
-.sub-title {
-  margin-top: 20px;
-  margin-bottom: 8px;
-}
-
 /* radio button */
 input[type="radio"] {
   display: none;
+}
+
+.radio-text {
+  display: inline-block;
+  margin: 8px 0 0;
 }
 
 .radio-text:before {
@@ -170,13 +180,13 @@ input[type="radio"]:checked + .radio-text:before {
 
 /* input emoji */
 .emoji-div {
-  margin-top: 8px;
-  margin-left: 8px;
+  margin: 8px 0 0 8px;
   display: flex;
   align-items: center;
   height: 80px;
 }
 
+/* 高さは合計76px */
 .input-emoji {
   padding: 8px 8px;
   width: 56px;
@@ -187,13 +197,13 @@ input[type="radio"]:checked + .radio-text:before {
 }
 
 .arrow {
-  margin-left: 16px;
-  margin-right: 16px;
+  margin: 0 16px;
   font-size: 32px;
   color: #888888;
 }
 
 .emoji-preview {
+  margin: 0;
   padding: 8px 8px;
   width: 56px;
   height: 56px;
@@ -227,19 +237,10 @@ input[type="radio"]:checked + .radio-text:before {
   filter: brightness(0) invert() brightness(0.534);
 }
 
-/* input url */
-.input-url {
-  margin-left: 8px;
-  padding: 4px 8px;
-  font-size: 16px;
-  width: calc(100% - 8px);
-  box-sizing: border-box;
-  border-radius: 4px;
-}
-
-/* input tooltip */
+/* input url & tooltip */
+.input-url,
 .input-tooltip {
-  margin-left: 8px;
+  margin: 8px 0 0 8px;
   padding: 4px 8px;
   font-size: 16px;
   width: calc(100% - 8px);
@@ -247,7 +248,7 @@ input[type="radio"]:checked + .radio-text:before {
   border-radius: 4px;
 }
 
-/* add anchor button */
+/* append anchor button */
 .append-button-div {
   margin-top: 12px;
   width: 100%;
@@ -265,5 +266,32 @@ input[type="radio"]:checked + .radio-text:before {
 }
 
 .append-button:hover {
+  background-color: #3f444c;
+}
+
+.import-export-div {
+  margin: 20px auto 0;
+  padding: 12px;
+  width: 500px;
+  text-align: left;
+  background-color: #36373b;
+  border-radius: 8px;
+  box-shadow: 0 0 10px 5px #00000060;
+}
+
+.export-button,
+.import-button {
+  display: inline-block;
+  margin: 12px 0 0 8px;
+  padding: 4px 16px;
+  min-width: 200px;
+  color: #97c1fc;
+  background-color: transparent;
+  border: 1px solid #72767b;
+  border-radius: 4px;
+}
+
+.export-button:hover,
+.import-button:hover {
   background-color: #3f444c;
 }

@@ -17,8 +17,10 @@
   const updateHidden = (anchors) => {
     const noAnchorP = document.querySelector(".no-anchor-p");
     if (anchors.length === 0) {
+      ul.classList.add("hidden");
       noAnchorP.classList.remove("hidden");
     } else {
+      ul.classList.remove("hidden");
       noAnchorP.classList.add("hidden");
     }
   };

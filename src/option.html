@@ -6,14 +6,14 @@
     <link rel="stylesheet" type="text/css" href="css/option.css" />
   </head>
   <body>
-    <h1 data-i18n-text="title"></h1>
+    <p class="main-title-p" data-i18n-text="title"></p>
     <div class="anchor-list-div">
-      <p class="title-p" data-i18n-text="list_of_shortcuts"></p>
+      <p class="first-title-p" data-i18n-text="list_of_shortcuts"></p>
       <p class="no-anchor-p" data-i18n-text="no_anchor"></p>
       <ul class="anchor-list"></ul>
     </div>
     <div class="append-anchor-div">
-      <p class="sub-title" data-i18n-text="symbol_of_button"></p>
+      <p class="first-title-p" data-i18n-text="symbol_of_button"></p>
       <label class="radio-label">
         <input type="radio" name="anchor-symbol" value="emoji" checked />
         <span class="radio-text" data-i18n-text="emoji"></span>
@@ -38,7 +38,7 @@
         <p class="arrow">➡︎</p>
         <img class="image-preview" src="images/question.png" />
       </div>
-      <p class="sub-title" data-i18n-text="shortcut_url"></p>
+      <p class="second-title-p" data-i18n-text="shortcut_url"></p>
       <input
         class="input-url"
         type="text"
@@ -46,7 +46,7 @@
         spellcheck="false"
         data-i18n-placeholder="url_placeholder"
       />
-      <p class="sub-title" data-i18n-text="tooltip"></p>
+      <p class="second-title-p" data-i18n-text="tooltip"></p>
       <input
         class="input-tooltip"
         type="text"
@@ -54,7 +54,7 @@
         spellcheck="false"
         data-i18n-placeholder="tooltip_placeholder"
       />
-      <p class="sub-title" data-i18n-text="how_to_open"></p>
+      <p class="second-title-p" data-i18n-text="how_to_open"></p>
       <label class="radio-label">
         <input type="radio" name="open-page" value="currenttab" checked />
         <span class="radio-text" data-i18n-text="current_tab"></span>
@@ -71,6 +71,11 @@
       <div class="append-button-div">
         <button class="append-button" data-i18n-text="append_button"></button>
       </div>
+    </div>
+    <div class="import-export-div">
+      <p class="first-title-p">設定の引き継ぎ</p>
+      <button class="export-button">現在の設定をエクスポート</button>
+      <button class="import-button">ファイルから設定をインポート</button>
     </div>
     <script src="js/option.js"></script>
   </body>
