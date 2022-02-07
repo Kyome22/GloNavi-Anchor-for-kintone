@@ -302,6 +302,10 @@
         canvas.height = 24;
         let context = canvas.getContext("2d");
         context.drawImage(image, (24 - w) / 2, (24 - h) / 2, w, h);
+        // グレーで塗り潰し
+        context.globalCompositeOperation = "source-in";
+        context.fillStyle = "#888888";
+        context.fillRect(0, 0, 24, 24);
         context.canvas.toBlob((blob) => {
           resolve(blob);
         });
