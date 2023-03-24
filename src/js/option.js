@@ -286,26 +286,28 @@
   // resize image
   const resize = (blobURL) => {
     return new Promise(function (resolve) {
+      const size = 48;
       const image = new Image();
       image.onload = () => {
         let w = image.width;
         let h = image.height;
         if (w < h) {
-          w = (24 * w) / h;
-          h = 24;
+          w = (size * w) / h;
+          h = size;
         } else {
-          h = (24 * h) / w;
-          w = 24;
+          h = (size * h) / w;
+          w = size;
         }
         const canvas = document.createElement("canvas");
-        canvas.width = 24;
-        canvas.height = 24;
-        let context = canvas.getContext("2d");
-        context.drawImage(image, (24 - w) / 2, (24 - h) / 2, w, h);
+        canvas.width = size;
+        canvas.height = size;
+        const context = canvas.getContext("2d");
+        context.imageSmoothingQuality = "high";
+        context.drawImage(image, (size - w) / 2, (size - h) / 2, w, h);
         // グレーで塗り潰し
         context.globalCompositeOperation = "source-in";
         context.fillStyle = "#888888";
-        context.fillRect(0, 0, 24, 24);
+        context.fillRect(0, 0, size, size);
         context.canvas.toBlob((blob) => {
           resolve(blob);
         });
