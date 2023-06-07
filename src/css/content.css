@@ -1,5 +1,25 @@
-.glonavi-symbol-anchor {
+.glonavi-symbol-anchor-gaia {
+  display: inline-block;
+  line-height: 48px;
+  width: 48px;
   height: 48px;
+  text-align: center;
+}
+
+.glonavi-symbol-anchor-gaia:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.glonavi-symbol-anchor-react {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+}
+
+.glonavi-symbol-anchor-react:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .glonavi-emoji-button {

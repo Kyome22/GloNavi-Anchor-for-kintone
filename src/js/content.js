@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const makeButton = (anchor) => {
+  const makeButton = (anchor, generation) => {
     const li = document.createElement("li");
     const a = document.createElement("a");
 
@@ -21,7 +21,7 @@
       a.appendChild(img);
     }
 
-    a.className = "gaia-header-img glonavi-symbol-anchor";
+    a.className = `glonavi-symbol-anchor-${generation}`;
     a.href = anchor.url;
     if (anchor.newtab) {
       a.setAttribute("target", "_blank");
@@ -33,13 +33,26 @@
   };
 
   const setButtons = () => {
-    const headerToolbarMenuUl = document
-      .querySelector(".gaia-header-toolbar-menu")
-      .getElementsByTagName("ul")[0];
+    console.log(document.getElementById("header-global-navigation-root"));
+
+    let generation = "react";
+    let headerToolbarMenuUl = document
+      ?.getElementById("header-global-navigation-root")
+      ?.getElementsByTagName("div")[0]
+      ?.getElementsByTagName("nav")[0]
+      ?.getElementsByTagName("div")[0]
+      ?.getElementsByTagName("ul")[0];
+
+    if (!headerToolbarMenuUl) {
+      generation = "gaia";
+      headerToolbarMenuUl = document
+        .querySelector(".gaia-header-toolbar-menu")
+        .getElementsByTagName("ul")[0];
+    }
 
     chrome.storage.sync.get({ anchors: [] }, function (options) {
       options.anchors.forEach((anchor) => {
-        const button = makeButton(anchor);
+        const button = makeButton(anchor, generation);
         headerToolbarMenuUl.appendChild(button);
       });
     });
