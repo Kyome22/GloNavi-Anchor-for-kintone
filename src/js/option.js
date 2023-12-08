@@ -56,7 +56,7 @@
   };
 
   const restoreAnchors = () => {
-    chrome.storage.sync.get({ anchors: [] }, function (options) {
+    chrome.storage.local.get({ anchors: [] }, function (options) {
       updateHidden(options.anchors);
       while (ul.firstChild) {
         ul.removeChild(ul.firstChild);
@@ -69,7 +69,7 @@
 
   const saveAnchors = () => {
     const anchors = currentAnchors();
-    chrome.storage.sync.set({ anchors: anchors }, function () {
+    chrome.storage.local.set({ anchors: anchors }, function () {
       updateHidden(anchors);
     });
   };

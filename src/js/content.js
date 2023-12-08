@@ -50,7 +50,7 @@
         .getElementsByTagName("ul")[0];
     }
 
-    chrome.storage.sync.get({ anchors: [] }, function (options) {
+    chrome.storage.local.get({ anchors: [] }, function (options) {
       options.anchors.forEach((anchor) => {
         const button = makeButton(anchor, generation);
         headerToolbarMenuUl.appendChild(button);
