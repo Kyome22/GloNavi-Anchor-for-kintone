@@ -16,6 +16,7 @@
   align-items: center;
   width: 48px;
   height: 48px;
+  text-decoration: none;
 }
 
 .glonavi-symbol-anchor-react:hover {
