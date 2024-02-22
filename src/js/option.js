@@ -56,7 +56,7 @@
   };
 
   const restoreAnchors = () => {
-    chrome.storage.local.get({ anchors: [] }, function (options) {
+    chrome.storage.local.get({ anchors: [] }, (options) => {
       updateHidden(options.anchors);
       while (ul.firstChild) {
         ul.removeChild(ul.firstChild);
@@ -69,16 +69,16 @@
 
   const saveAnchors = () => {
     const anchors = currentAnchors();
-    chrome.storage.local.set({ anchors: anchors }, function () {
+    chrome.storage.local.set({ anchors: anchors }, () => {
       updateHidden(anchors);
     });
   };
 
-  function removeAnchorItem(e) {
-    const li = e.target.parentElement;
+  const removeAnchorItem = (event) => {
+    const li = event.target.parentElement;
     li.remove();
     saveAnchors();
-  }
+  };
 
   const makeAnchorItem = (anchor) => {
     const li = document.createElement("li");
@@ -188,9 +188,9 @@
     document.querySelector(".image-div").style.display = "none";
     const radios = document.getElementsByName("anchor-symbol");
     for (const radio of radios) {
-      radio.addEventListener("change", function (e) {
-        const emojiDisplay = e.target.value == "emoji" ? "" : "none";
-        const imageDisplay = e.target.value == "image" ? "" : "none";
+      radio.addEventListener("change", (event) => {
+        const emojiDisplay = event.target.value == "emoji" ? "" : "none";
+        const imageDisplay = event.target.value == "image" ? "" : "none";
         document.querySelector(".emoji-div").style.display = emojiDisplay;
         document.querySelector(".image-div").style.display = imageDisplay;
       });
@@ -201,10 +201,7 @@
     const emojiPreview = document.querySelector(".emoji-preview");
     const inputEmoji = document.querySelector(".input-emoji");
     inputEmoji.addEventListener("input", () => {
-      if (
-        0 < inputEmoji.value.length &&
-        inputEmoji.scrollWidth <= inputEmoji.clientWidth
-      ) {
+      if (0 < inputEmoji.value.length && inputEmoji.scrollWidth <= inputEmoji.clientWidth) {
         emojiPreview.innerText = inputEmoji.value;
       } else {
         emojiPreview.innerText = "?";
@@ -213,26 +210,24 @@
   };
 
   const observeImageInput = () => {
-    document
-      .querySelector(".input-image")
-      .addEventListener("change", function (e) {
-        if (0 < e.target.files.length) {
-          const blobURL = URL.createObjectURL(e.target.files[0]);
-          document.querySelector(".image-preview").src = blobURL;
-        } else {
-          document.querySelector(".image-preview").src = "images/question.png";
-        }
-      });
+    document.querySelector(".input-image").addEventListener("change", (event) => {
+      if (0 < event.target.files.length) {
+        const blobURL = URL.createObjectURL(event.target.files[0]);
+        document.querySelector(".image-preview").src = blobURL;
+      } else {
+        document.querySelector(".image-preview").src = "images/question.png";
+      }
+    });
   };
 
   // Drag & Drop Sort
-  const mouseDown = (e) => {
-    e.preventDefault();
-    const li = e.target.parentElement;
+  const mouseDown = (event) => {
+    event.preventDefault();
+    const li = event.target.parentElement;
     sortData.li = li;
     const ulTop = ul.getBoundingClientRect().top;
     const liTop = li.getBoundingClientRect().top;
-    sortData.diffY = e.pageY + ulTop - liTop;
+    sortData.diffY = event.pageY + ulTop - liTop;
 
     const clone = li.cloneNode(true);
     clone.classList.add("anchor-clone");
@@ -245,8 +240,8 @@
     window.addEventListener("mouseup", mouseUp);
   };
 
-  const mouseMove = (e) => {
-    const newTop = e.pageY - sortData.diffY;
+  const mouseMove = (event) => {
+    const newTop = event.pageY - sortData.diffY;
     sortData.li.style.top = `${newTop}px`;
 
     const index = liIndex(sortData.li);
@@ -285,7 +280,7 @@
 
   // resize image
   const resize = (blobURL) => {
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
       const size = 48;
       const image = new Image();
       image.onload = () => {
@@ -367,21 +362,16 @@
     saveAnchors();
   };
 
-  function isString(obj) {
+  const isString = (obj) => {
     return typeof obj === "string" || obj instanceof String;
-  }
+  };
 
   const jsonValidation = (json) => {
     if (!Array.isArray(json)) {
       return false;
     }
     for (let obj of json) {
-      const keyCheck =
-        "emoji" in obj &&
-        "image" in obj &&
-        "url" in obj &&
-        "tooltip" in obj &&
-        "newtab" in obj;
+      const keyCheck = ["emoji", "image", "url", "tooltip", "newtab"].every((key) => key in obj);
       if (!keyCheck) {
         return false;
       }
