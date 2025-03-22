@@ -1,35 +1,85 @@
-<div
-  style="
-    width: 128px;
-    height: 128px;
-    background-color: #ffcc00;
-    text-align: center;
-    line-height: 128px;
-  "
->
-  <p style="font-size: 80px; color: transparent; text-shadow: 0 0 0 #000000">📌</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>icon</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.13/html-to-image.min.js"
+      type="text/javascript"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+      type="text/javascript"
+    ></script>
+  </head>
+  <body style="text-align: center">
+    <div>
+      <div style="display: flex; align-items: center; justify-content: center; gap: 8px">
+        <div
+          id="icon128"
+          style="
+            width: 128px;
+            height: 128px;
+            background-color: #ffcc00;
+            text-align: center;
+            line-height: 128px;
+            border-radius: 24px;
+          "
+        >
+          <p style="margin: 0; font-size: 80px; color: transparent; text-shadow: 0 0 0 #000000">
+            📌
+          </p>
+        </div>
+        <div
+          id="icon48"
+          style="
+            width: 48px;
+            height: 48px;
+            background-color: #ffcc00;
+            text-align: center;
+            line-height: 48px;
+            border-radius: 9px;
+          "
+        >
+          <p style="margin: 0; font-size: 22px; color: transparent; text-shadow: 0 0 0 #000000">
+            📌
+          </p>
+        </div>
+        <div
+          id="icon16"
+          style="
+            width: 16px;
+            height: 16px;
+            background-color: #ffcc00;
+            text-align: center;
+            line-height: 16px;
+            border-radius: 3px;
+          "
+        >
+          <p style="margin: 0; font-size: 8px; color: transparent; text-shadow: 0 0 0 #000000">
+            📌
+          </p>
+        </div>
+      </div>
+      <br />
+      <a id="download">ダウンロード</a>
+    </div>
+    <script type="text/javascript">
+      window.onload = async function () {
+        const zip = new JSZip();
+        const folder = zip.folder("icon");
+        if (folder === null) return;
 
-<div
-  style="
-    width: 48px;
-    height: 48px;
-    background-color: #ffcc00;
-    text-align: center;
-    line-height: 48px;
-  "
->
-  <p style="font-size: 22px; color: transparent; text-shadow: 0 0 0 #000000">📌</p>
-</div>
+        for await (size of [128, 48, 16]) {
+          const blob = await htmlToImage.toBlob(document.querySelector(`#icon${size}`));
+          folder.file(`icon${size}.png`, blob);
+        }
 
-<div
-  style="
-    width: 16px;
-    height: 16px;
-    background-color: #ffcc00;
-    text-align: center;
-    line-height: 16px;
-  "
->
-  <p style="font-size: 8px; color: transparent; text-shadow: 0 0 0 #000000">📌</p>
-</div>
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+
+        const link = document.getElementById("download");
+        link.href = URL.createObjectURL(zipBlob);
+        link.download = "icon.zip";
+      };
+    </script>
+  </body>
+</html>
