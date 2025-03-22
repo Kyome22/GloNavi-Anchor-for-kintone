@@ -8,7 +8,7 @@ kintone のグローバルナビゲーションに独自のショートカット
 
 Chrome ウェブストアにて拡張機能をインストールしてください。
 
-➡️ [GloNavi Anchor for kintone](https://chrome.google.com/webstore/detail/glonavi-anchor-for-kinton/gjniipeclimojedklghnfjfioklgfllc?hl=ja)
+➡️ [GloNavi Anchor for kintone](https://chrome.google.com/webstore/detail/glonavi-anchor-for-kinton/gjniipeclimojedklghnfjfioklgfllc)
 
 ## ボタンの追加方法
 
