@@ -74,7 +74,7 @@
 
         for await (size of [128, 48, 16]) {
           const blob = await htmlToImage.toBlob(document.querySelector(`#icon${size}`));
-          folder.file(`icon${size}.png`, blob);
+          folder.file(`icon-${size}.png`, blob);
         }
 
         const zipBlob = await zip.generateAsync({ type: "blob" });
