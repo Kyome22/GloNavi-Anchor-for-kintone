@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "GloNavi Anchor for kintone",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "homepage_url": "https://github.com/Kyome22/kintone-GloNavi-Anchor",
   "description": "__MSG_description__",
   "default_locale": "en",

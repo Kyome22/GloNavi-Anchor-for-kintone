@@ -33,8 +33,6 @@
   };
 
   const setButtons = () => {
-    console.log(document.getElementById("header-global-navigation-root"));
-
     let generation = "react";
     let headerToolbarMenuUl = document
       ?.getElementById("header-global-navigation-root")
