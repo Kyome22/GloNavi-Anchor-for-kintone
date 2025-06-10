@@ -34,6 +34,14 @@ Chrome ウェブストアにて拡張機能をインストールしてくださ�
 
 ![必要項目の入力と追加](./resources/sort_anchors.gif)
 
+## 新しい端末への設定の引き継ぎ
+
+1. 古い端末で現在の設定をエクスポートする
+2. 出力された`glonavi_settings.json`ファイルを新しい端末へ送る
+3. 新しい端末でファイルから設定をインポートする
+
+![設定の引き継ぎ](./resources/transfer_settings.png)
+
 ## LICENSE
 
 [MIT](https://github.com/Kyome22/GloNavi-Anchor-for-kintone/blob/main/LICENSE)
