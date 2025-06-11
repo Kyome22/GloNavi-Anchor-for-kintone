@@ -1,20 +1,19 @@
-(() => {
+(async () => {
   "use strict";
 
-  const CLASS_NAMES = {
-    EMOJI_BUTTON: "glonavi-emoji-button",
-    IMAGE_BUTTON: "glonavi-image-button",
-    SYMBOL_ANCHOR: "glonavi-symbol-anchor",
+  const BUTTON_TYPE = {
+    EMOJI: "glonavi-emoji-button",
+    IMAGE: "glonavi-image-button",
   };
 
-  const GENERATIONS = {
+  const GENERATION = {
     REACT: "react",
     GAIA: "gaia",
   };
 
   const createEmojiElement = (anchor) => {
     const span = document.createElement("span");
-    span.className = CLASS_NAMES.EMOJI_BUTTON;
+    span.className = BUTTON_TYPE.EMOJI;
     span.innerText = anchor.emoji;
     span.title = anchor.tooltip;
     return span;
@@ -22,7 +21,7 @@
 
   const createImageElement = (anchor) => {
     const img = document.createElement("img");
-    img.className = CLASS_NAMES.IMAGE_BUTTON;
+    img.className = BUTTON_TYPE.IMAGE;
     img.src = anchor.image;
     img.title = anchor.tooltip;
     return img;
@@ -30,7 +29,7 @@
 
   const createAnchorElement = (anchor, generation) => {
     const a = document.createElement("a");
-    a.className = `${CLASS_NAMES.SYMBOL_ANCHOR}-${generation}`;
+    a.className = `glonavi-symbol-anchor-${generation}`;
     a.href = anchor.url;
 
     if (anchor.newtab) {
@@ -66,33 +65,32 @@
       ?.getElementsByTagName("ul")[0];
 
     if (reactGlobalNavigation) {
-      return { generation: GENERATIONS.REACT, globalNavigation: reactGlobalNavigation };
+      return { generation: GENERATION.REACT, globalNavigation: reactGlobalNavigation };
     }
 
     // Gaia版のヘッダーを探す
     const gaiaGlobalNavigation = document.querySelector(".gaia-header-toolbar-menu")?.getElementsByTagName("ul")[0];
 
     if (gaiaGlobalNavigation) {
-      return { generation: GENERATIONS.GAIA, globalNavigation: gaiaGlobalNavigation };
+      return { generation: GENERATION.GAIA, globalNavigation: gaiaGlobalNavigation };
     }
 
-    throw new Error("ヘッダーメニューが見つかりませんでした");
+    throw new Error("グローバルナビゲーションが見つかりませんでした。");
   };
 
-  const setButtons = () => {
+  const setButtons = async () => {
     try {
       const { generation, globalNavigation } = findGlobalNavigation();
 
-      chrome.storage.local.get({ anchors: [] }, (options) => {
-        options.anchors.forEach((anchor) => {
-          const button = makeButton(anchor, generation);
-          globalNavigation.appendChild(button);
-        });
+      const { anchors } = await chrome.storage.local.get({ anchors: [] });
+      anchors.forEach((anchor) => {
+        const button = makeButton(anchor, generation);
+        globalNavigation.appendChild(button);
       });
     } catch (error) {
-      console.error("ボタンの設定中にエラーが発生しました:", error);
+      console.error("ボタンの設定中にエラーが発生しました。Error:", error);
     }
   };
 
-  setButtons();
+  await setButtons();
 })();
