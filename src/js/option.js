@@ -171,17 +171,14 @@
         li: null,
         diffY: 0,
       };
-      this.mouseDown = this.mouseDown.bind(this);
-      this.mouseMove = this.mouseMove.bind(this);
-      this.mouseUp = this.mouseUp.bind(this);
     }
 
-    liIndex(li) {
+    getIndexOf(li) {
       const items = Array.from(document.querySelectorAll(".anchor-item"));
       return items.findIndex((item) => item === li);
     }
 
-    mouseDown(event) {
+    mouseDown = (event) => {
       event.preventDefault();
       const li = event.target.parentElement;
       this.sortData.li = li;
@@ -198,13 +195,13 @@
 
       window.addEventListener("mousemove", this.mouseMove);
       window.addEventListener("mouseup", this.mouseUp);
-    }
+    };
 
-    mouseMove(event) {
+    mouseMove = (event) => {
       const newTop = event.pageY - this.sortData.diffY;
       this.sortData.li.style.top = `${newTop}px`;
 
-      const index = this.liIndex(this.sortData.li);
+      const index = this.getIndexOf(this.sortData.li);
       const clone = document.querySelector(".anchor-clone");
       const pattern = ".anchor-item:not(.anchor-grasp):not(.anchor-clone)";
       let items = Array.from(document.querySelectorAll(pattern));
@@ -223,9 +220,9 @@
           break;
         }
       }
-    }
+    };
 
-    async mouseUp() {
+    mouseUp = async () => {
       document.querySelector(".anchor-clone").remove();
 
       this.sortData.li.removeAttribute("style");
@@ -237,7 +234,7 @@
 
       window.removeEventListener("mousemove", this.mouseMove);
       window.removeEventListener("mouseup", this.mouseUp);
-    }
+    };
 
     setupGraspArea(imgGrasp) {
       imgGrasp.addEventListener("mousedown", this.mouseDown);
