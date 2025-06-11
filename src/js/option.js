@@ -11,17 +11,35 @@
       this.imageProcessor = new ImageProcessor();
     }
 
-    updateVisibility(anchors) {
-      if (anchors.length === 0) {
-        this.ul.classList.add("hidden");
-        this.noAnchorP.classList.remove("hidden");
-      } else {
-        this.ul.classList.remove("hidden");
-        this.noAnchorP.classList.add("hidden");
-      }
+    async loadFromStorage() {
+      const { anchors } = await chrome.storage.local.get({ anchors: [] });
+      return anchors;
     }
 
-    renderAnchorElement(anchor) {
+    async saveToStorage(anchors) {
+      await chrome.storage.local.set({ anchors: anchors });
+    }
+
+    getAnchors() {
+      let items = Array.from(document.querySelectorAll(".anchor-item"));
+      return items.map((item) => {
+        const aEmoji = item.querySelector(".anchor-emoji");
+        const emoji = aEmoji == null ? null : aEmoji.innerText;
+
+        const aImage = item.querySelector(".anchor-image");
+        const image = aImage == null ? null : aImage.src;
+
+        return {
+          emoji: emoji,
+          image: image,
+          url: item.querySelector(".anchor-url").innerText,
+          tooltip: item.getAttribute("tooltip"),
+          newtab: item.classList.contains("newtab"),
+        };
+      });
+    }
+
+    appendAnchorElement(anchor) {
       const li = document.createElement("li");
       li.className = "anchor-item";
       let note = anchor.tooltip;
@@ -63,21 +81,38 @@
       btnDelete.innerText = localize("delete");
       btnDelete.addEventListener("click", async (event) => {
         const li = event.target.parentElement;
-        li.remove();
-        await this.saveAnchorsToStorage();
+        await this.removeAnchorElement(li);
       });
       li.appendChild(btnDelete);
 
       this.ul.appendChild(li);
     }
 
-    renderAnchorElements(anchors) {
+    appendAnchorElements(anchors) {
       anchors.forEach((anchor) => {
-        this.renderAnchorElement(anchor);
+        this.appendAnchorElement(anchor);
       });
+      this.updateVisibility(anchors);
     }
 
-    async collectAnchorInfo() {
+    async removeAnchorElement(li) {
+      li.remove();
+      const anchors = this.getAnchors();
+      await this.saveToStorage(anchors);
+      this.updateVisibility(anchors);
+    }
+
+    updateVisibility(anchors) {
+      if (anchors.length === 0) {
+        this.ul.classList.add("hidden");
+        this.noAnchorP.classList.remove("hidden");
+      } else {
+        this.ul.classList.remove("hidden");
+        this.noAnchorP.classList.add("hidden");
+      }
+    }
+
+    async createAnchorFromForm() {
       const emojiDiv = document.querySelector(".emoji-div");
       const inputEmoji = document.querySelector(".input-emoji");
       let emoji = null;
@@ -118,44 +153,13 @@
       };
     }
 
-    async createNewAnchorItem() {
-      const anchor = await this.collectAnchorInfo();
-      this.renderAnchorElement(anchor);
-      await this.saveAnchorsToStorage();
-    }
+    async appendNewAnchor() {
+      const anchor = await this.createAnchorFromForm();
+      this.appendAnchorElement(anchor);
+      this.updateVisibility([anchor]);
 
-    getAnchors() {
-      let items = Array.from(document.querySelectorAll(".anchor-item"));
-      return items.map((item) => {
-        const aEmoji = item.querySelector(".anchor-emoji");
-        const emoji = aEmoji == null ? null : aEmoji.innerText;
-
-        const aImage = item.querySelector(".anchor-image");
-        const image = aImage == null ? null : aImage.src;
-
-        return {
-          emoji: emoji,
-          image: image,
-          url: item.querySelector(".anchor-url").innerText,
-          tooltip: item.getAttribute("tooltip"),
-          newtab: item.classList.contains("newtab"),
-        };
-      });
-    }
-
-    async loadAnchorsFromStorage() {
-      const { anchors } = await chrome.storage.local.get({ anchors: [] });
-      this.updateVisibility(anchors);
-      while (this.ul.firstChild) {
-        this.ul.removeChild(this.ul.firstChild);
-      }
-      this.renderAnchorElements(anchors);
-    }
-
-    async saveAnchorsToStorage() {
       const anchors = this.getAnchors();
-      await chrome.storage.local.set({ anchors: anchors });
-      this.updateVisibility(anchors);
+      await this.saveToStorage(anchors);
     }
   }
 
@@ -228,7 +232,8 @@
       this.sortData.li.classList.remove("anchor-grasp");
       this.sortData.li = null;
 
-      await this.anchorManager.saveAnchorsToStorage();
+      const anchors = this.anchorManager.getAnchors();
+      await this.anchorManager.saveToStorage(anchors);
 
       window.removeEventListener("mousemove", this.mouseMove);
       window.removeEventListener("mouseup", this.mouseUp);
@@ -386,7 +391,7 @@
       this.setupSymbolRadio();
       this.setupEmojiInput();
       this.setupImageInput();
-      await this.anchorManager.loadAnchorsFromStorage();
+      this.setupAnchorList();
     }
 
     setupLocalization() {
@@ -403,7 +408,7 @@
     setupAppendButton() {
       document.querySelector(".append-button").addEventListener("click", async () => {
         try {
-          await this.anchorManager.createNewAnchorItem();
+          await this.anchorManager.appendNewAnchor();
         } catch (error) {
           window.alert(error.message);
         }
@@ -425,8 +430,8 @@
       document.querySelector(".import-button").addEventListener("click", async () => {
         try {
           const anchors = await this.settingsManager.importSettings();
-          this.anchorManager.renderAnchorElements(anchors);
-          await this.anchorManager.saveAnchorsToStorage();
+          this.anchorManager.appendAnchorElements(anchors);
+          await this.anchorManager.saveToStorage(anchors);
         } catch (error) {
           window.alert(`Import Error: ${error.message}`);
         }
@@ -467,6 +472,11 @@
           document.querySelector(".image-preview").src = "images/question.png";
         }
       });
+    }
+
+    async setupAnchorList() {
+      const anchors = await this.anchorManager.loadFromStorage();
+      this.anchorManager.appendAnchorElements(anchors);
     }
   }
 
