@@ -4,10 +4,10 @@
   const localize = chrome.i18n.getMessage;
 
   class AnchorManager {
-    constructor(ul) {
-      this.ul = ul;
+    constructor() {
+      this.ul = document.querySelector(".anchor-list");
       this.noAnchorP = document.querySelector(".no-anchor-p");
-      this.dragDropManager = new DragDropManager(ul, this);
+      this.dragDropManager = new DragDropManager(this.ul, this);
       this.imageProcessor = new ImageProcessor();
     }
 
@@ -19,42 +19,6 @@
         this.ul.classList.remove("hidden");
         this.noAnchorP.classList.add("hidden");
       }
-    }
-
-    currentAnchors() {
-      let items = Array.from(document.querySelectorAll(".anchor-item"));
-      return items.map((item) => {
-        const aEmoji = item.querySelector(".anchor-emoji");
-        const emoji = aEmoji == null ? null : aEmoji.innerText;
-
-        const aImage = item.querySelector(".anchor-image");
-        const image = aImage == null ? null : aImage.src;
-
-        return {
-          emoji: emoji,
-          image: image,
-          url: item.querySelector(".anchor-url").innerText,
-          tooltip: item.getAttribute("tooltip"),
-          newtab: item.classList.contains("newtab"),
-        };
-      });
-    }
-
-    async restore() {
-      const { anchors } = await chrome.storage.local.get({ anchors: [] });
-      this.updateHidden(anchors);
-      while (this.ul.firstChild) {
-        this.ul.removeChild(this.ul.firstChild);
-      }
-      anchors.forEach((anchor) => {
-        this.appendAnchorItem(anchor);
-      });
-    }
-
-    async save() {
-      const anchors = this.currentAnchors();
-      await chrome.storage.local.set({ anchors: anchors });
-      this.updateHidden(anchors);
     }
 
     appendAnchorItem(anchor) {
@@ -107,6 +71,12 @@
       this.ul.appendChild(li);
     }
 
+    appendAnchorItems(anchors) {
+      anchors.forEach((anchor) => {
+        this.appendAnchorItem(anchor);
+      });
+    }
+
     async collectAnchorInfo() {
       const emojiDiv = document.querySelector(".emoji-div");
       const inputEmoji = document.querySelector(".input-emoji");
@@ -153,6 +123,40 @@
       this.appendAnchorItem(anchor);
       await this.save();
     }
+
+    currentAnchors() {
+      let items = Array.from(document.querySelectorAll(".anchor-item"));
+      return items.map((item) => {
+        const aEmoji = item.querySelector(".anchor-emoji");
+        const emoji = aEmoji == null ? null : aEmoji.innerText;
+
+        const aImage = item.querySelector(".anchor-image");
+        const image = aImage == null ? null : aImage.src;
+
+        return {
+          emoji: emoji,
+          image: image,
+          url: item.querySelector(".anchor-url").innerText,
+          tooltip: item.getAttribute("tooltip"),
+          newtab: item.classList.contains("newtab"),
+        };
+      });
+    }
+
+    async restore() {
+      const { anchors } = await chrome.storage.local.get({ anchors: [] });
+      this.updateHidden(anchors);
+      while (this.ul.firstChild) {
+        this.ul.removeChild(this.ul.firstChild);
+      }
+      this.appendAnchorItems(anchors);
+    }
+
+    async save() {
+      const anchors = this.currentAnchors();
+      await chrome.storage.local.set({ anchors: anchors });
+      this.updateHidden(anchors);
+    }
   }
 
   class DragDropManager {
@@ -170,7 +174,7 @@
       return items.findIndex((item) => item === li);
     }
 
-    mouseDown(event) {
+    mouseDown = (event) => {
       event.preventDefault();
       const li = event.target.parentElement;
       this.sortData.li = li;
@@ -185,11 +189,11 @@
       li.classList.add("anchor-grasp");
       li.insertAdjacentElement("afterend", clone);
 
-      window.addEventListener("mousemove", this.mouseMove.bind(this));
-      window.addEventListener("mouseup", this.mouseUp.bind(this));
-    }
+      window.addEventListener("mousemove", this.mouseMove);
+      window.addEventListener("mouseup", this.mouseUp);
+    };
 
-    mouseMove(event) {
+    mouseMove = (event) => {
       const newTop = event.pageY - this.sortData.diffY;
       this.sortData.li.style.top = `${newTop}px`;
 
@@ -212,9 +216,9 @@
           break;
         }
       }
-    }
+    };
 
-    async mouseUp() {
+    mouseUp = async () => {
       document.querySelector(".anchor-clone").remove();
 
       this.sortData.li.removeAttribute("style");
@@ -223,12 +227,12 @@
 
       await this.anchorManager.save();
 
-      window.removeEventListener("mousemove", this.mouseMove.bind(this));
-      window.removeEventListener("mouseup", this.mouseUp.bind(this));
-    }
+      window.removeEventListener("mousemove", this.mouseMove);
+      window.removeEventListener("mouseup", this.mouseUp);
+    };
 
     setupGraspArea(imgGrasp) {
-      imgGrasp.addEventListener("mousedown", this.mouseDown.bind(this));
+      imgGrasp.addEventListener("mousedown", this.mouseDown);
     }
   }
 
@@ -289,9 +293,7 @@
   }
 
   class SettingsManager {
-    constructor(anchorManager) {
-      this.anchorManager = anchorManager;
-    }
+    constructor() {}
 
     isString(obj) {
       return typeof obj === "string" || obj instanceof String;
@@ -321,12 +323,10 @@
       return true;
     }
 
-    async exportSettings() {
-      const noAnchorP = document.querySelector(".no-anchor-p");
-      if (noAnchorP.classList.contains("hidden") === false) {
+    async exportSettings(anchors) {
+      if (anchors.length === 0) {
         throw new Error(localize("error6"));
       }
-      const anchors = this.anchorManager.currentAnchors();
       const json = JSON.stringify(anchors, null, 2);
       const options = {
         types: [
@@ -365,49 +365,68 @@
       if (!this.validateJson(json)) {
         throw new Error(localize("error7", [file.name]));
       }
-      json.forEach((anchor) => {
-        this.anchorManager.appendAnchorItem(anchor);
-      });
-      await this.anchorManager.save();
+      return json;
     }
   }
 
-  class InitialUIEventSetupAgent {
-    constructor(anchorManager, settingsManager) {
-      this.anchorManager = anchorManager;
-      this.settingsManager = settingsManager;
+  class Initializer {
+    constructor() {
+      this.anchorManager = new AnchorManager();
+      this.settingsManager = new SettingsManager();
     }
 
-    setup() {
+    async setup() {
+      this.setupLocalization();
       this.setupAppendButton();
       this.setupExportButton();
       this.setupImportButton();
       this.setupSymbolRadio();
       this.setupEmojiInput();
       this.setupImageInput();
+      await this.anchorManager.restore();
+    }
+
+    setupLocalization() {
+      document.querySelectorAll("[data-i18n-text]").forEach((element) => {
+        const key = element.getAttribute("data-i18n-text");
+        element.textContent = localize(key);
+      });
+      document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+        const key = element.getAttribute("data-i18n-placeholder");
+        element.placeholder = localize(key);
+      });
     }
 
     setupAppendButton() {
-      document.querySelector(".append-button").addEventListener("click", () => {
-        this.anchorManager.createNewAnchorItem().catch((error) => {
+      document.querySelector(".append-button").addEventListener("click", async () => {
+        try {
+          await this.anchorManager.createNewAnchorItem();
+        } catch (error) {
           window.alert(error.message);
-        });
+        }
       });
     }
 
     setupExportButton() {
-      document.querySelector(".export-button").addEventListener("click", () => {
-        this.settingsManager.exportSettings().catch((error) => {
+      document.querySelector(".export-button").addEventListener("click", async () => {
+        try {
+          const anchors = this.anchorManager.currentAnchors();
+          await this.settingsManager.exportSettings(anchors);
+        } catch (error) {
           window.alert(`Export Error: ${error.message}`);
-        });
+        }
       });
     }
 
     setupImportButton() {
-      document.querySelector(".import-button").addEventListener("click", () => {
-        this.settingsManager.importSettings().catch((error) => {
+      document.querySelector(".import-button").addEventListener("click", async () => {
+        try {
+          const anchors = await this.settingsManager.importSettings();
+          this.anchorManager.appendAnchorItems(anchors);
+          await this.anchorManager.save();
+        } catch (error) {
           window.alert(`Import Error: ${error.message}`);
-        });
+        }
       });
     }
 
@@ -448,24 +467,8 @@
     }
   }
 
-  const initialLocalizeHTML = () => {
-    document.querySelectorAll("[data-i18n-text]").forEach((element) => {
-      const key = element.getAttribute("data-i18n-text");
-      element.textContent = localize(key);
-    });
-    document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
-      const key = element.getAttribute("data-i18n-placeholder");
-      element.placeholder = localize(key);
-    });
-  };
-
   document.addEventListener("DOMContentLoaded", async () => {
-    initialLocalizeHTML();
-    const ul = document.querySelector(".anchor-list");
-    const anchorManager = new AnchorManager(ul);
-    const settingsManager = new SettingsManager(anchorManager);
-    const initialUIEventSetupAgent = new InitialUIEventSetupAgent(anchorManager, settingsManager);
-    initialUIEventSetupAgent.setup();
-    await anchorManager.restore();
+    const initializer = new Initializer();
+    await initializer.setup();
   });
 })();
