@@ -1,4 +1,4 @@
-(() => {
+(async () => {
   "use strict";
 
   const localize = chrome.i18n.getMessage;
@@ -55,29 +55,27 @@
     });
   };
 
-  const restoreAnchors = () => {
-    chrome.storage.local.get({ anchors: [] }, (options) => {
-      updateHidden(options.anchors);
-      while (ul.firstChild) {
-        ul.removeChild(ul.firstChild);
-      }
-      options.anchors.forEach((anchor) => {
-        ul.appendChild(makeAnchorItem(anchor));
-      });
+  const restoreAnchors = async () => {
+    const { anchors } = await chrome.storage.local.get({ anchors: [] });
+    updateHidden(anchors);
+    while (ul.firstChild) {
+      ul.removeChild(ul.firstChild);
+    }
+    anchors.forEach((anchor) => {
+      ul.appendChild(makeAnchorItem(anchor));
     });
   };
 
-  const saveAnchors = () => {
+  const saveAnchors = async () => {
     const anchors = currentAnchors();
-    chrome.storage.local.set({ anchors: anchors }, () => {
-      updateHidden(anchors);
-    });
+    await chrome.storage.local.set({ anchors: anchors });
+    updateHidden(anchors);
   };
 
-  const removeAnchorItem = (event) => {
+  const removeAnchorItem = async (event) => {
     const li = event.target.parentElement;
     li.remove();
-    saveAnchors();
+    await saveAnchors();
   };
 
   const makeAnchorItem = (anchor) => {
@@ -181,7 +179,7 @@
       newtab: inputNewTab.checked,
     };
     ul.appendChild(makeAnchorItem(anchor));
-    saveAnchors();
+    await saveAnchors();
   };
 
   const observeSymbolRadio = () => {
@@ -265,14 +263,14 @@
     }
   };
 
-  const mouseUp = () => {
+  const mouseUp = async () => {
     document.querySelector(".anchor-clone").remove();
 
     sortData.li.removeAttribute("style");
     sortData.li.classList.remove("anchor-grasp");
     sortData.li = null;
 
-    saveAnchors();
+    await saveAnchors();
 
     window.removeEventListener("mousemove", mouseMove);
     window.removeEventListener("mouseup", mouseUp);
@@ -359,7 +357,7 @@
     json.forEach((anchor) => {
       ul.appendChild(makeAnchorItem(anchor));
     });
-    saveAnchors();
+    await saveAnchors();
   };
 
   const isString = (obj) => {
@@ -390,9 +388,9 @@
     return true;
   };
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     initialLocalizeHTML();
-    restoreAnchors();
+    await restoreAnchors();
     observeSymbolRadio();
     observeEmojiInput();
     observeImageInput();
