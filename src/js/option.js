@@ -167,6 +167,9 @@
         li: null,
         diffY: 0,
       };
+      this.mouseDown = this.mouseDown.bind(this);
+      this.mouseMove = this.mouseMove.bind(this);
+      this.mouseUp = this.mouseUp.bind(this);
     }
 
     liIndex(li) {
@@ -174,7 +177,7 @@
       return items.findIndex((item) => item === li);
     }
 
-    mouseDown = (event) => {
+    mouseDown(event) {
       event.preventDefault();
       const li = event.target.parentElement;
       this.sortData.li = li;
@@ -191,9 +194,9 @@
 
       window.addEventListener("mousemove", this.mouseMove);
       window.addEventListener("mouseup", this.mouseUp);
-    };
+    }
 
-    mouseMove = (event) => {
+    mouseMove(event) {
       const newTop = event.pageY - this.sortData.diffY;
       this.sortData.li.style.top = `${newTop}px`;
 
@@ -216,9 +219,9 @@
           break;
         }
       }
-    };
+    }
 
-    mouseUp = async () => {
+    async mouseUp() {
       document.querySelector(".anchor-clone").remove();
 
       this.sortData.li.removeAttribute("style");
@@ -229,7 +232,7 @@
 
       window.removeEventListener("mousemove", this.mouseMove);
       window.removeEventListener("mouseup", this.mouseUp);
-    };
+    }
 
     setupGraspArea(imgGrasp) {
       imgGrasp.addEventListener("mousedown", this.mouseDown);
