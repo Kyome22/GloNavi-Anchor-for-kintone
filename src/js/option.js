@@ -11,7 +11,7 @@
       this.imageProcessor = new ImageProcessor();
     }
 
-    updateHidden(anchors) {
+    updateVisibility(anchors) {
       if (anchors.length === 0) {
         this.ul.classList.add("hidden");
         this.noAnchorP.classList.remove("hidden");
@@ -21,7 +21,7 @@
       }
     }
 
-    appendAnchorItem(anchor) {
+    renderAnchorElement(anchor) {
       const li = document.createElement("li");
       li.className = "anchor-item";
       let note = anchor.tooltip;
@@ -64,16 +64,16 @@
       btnDelete.addEventListener("click", async (event) => {
         const li = event.target.parentElement;
         li.remove();
-        await this.save();
+        await this.saveAnchorsToStorage();
       });
       li.appendChild(btnDelete);
 
       this.ul.appendChild(li);
     }
 
-    appendAnchorItems(anchors) {
+    renderAnchorElements(anchors) {
       anchors.forEach((anchor) => {
-        this.appendAnchorItem(anchor);
+        this.renderAnchorElement(anchor);
       });
     }
 
@@ -120,11 +120,11 @@
 
     async createNewAnchorItem() {
       const anchor = await this.collectAnchorInfo();
-      this.appendAnchorItem(anchor);
-      await this.save();
+      this.renderAnchorElement(anchor);
+      await this.saveAnchorsToStorage();
     }
 
-    currentAnchors() {
+    getAnchors() {
       let items = Array.from(document.querySelectorAll(".anchor-item"));
       return items.map((item) => {
         const aEmoji = item.querySelector(".anchor-emoji");
@@ -143,19 +143,19 @@
       });
     }
 
-    async restore() {
+    async loadAnchorsFromStorage() {
       const { anchors } = await chrome.storage.local.get({ anchors: [] });
-      this.updateHidden(anchors);
+      this.updateVisibility(anchors);
       while (this.ul.firstChild) {
         this.ul.removeChild(this.ul.firstChild);
       }
-      this.appendAnchorItems(anchors);
+      this.renderAnchorElements(anchors);
     }
 
-    async save() {
-      const anchors = this.currentAnchors();
+    async saveAnchorsToStorage() {
+      const anchors = this.getAnchors();
       await chrome.storage.local.set({ anchors: anchors });
-      this.updateHidden(anchors);
+      this.updateVisibility(anchors);
     }
   }
 
@@ -228,7 +228,7 @@
       this.sortData.li.classList.remove("anchor-grasp");
       this.sortData.li = null;
 
-      await this.anchorManager.save();
+      await this.anchorManager.saveAnchorsToStorage();
 
       window.removeEventListener("mousemove", this.mouseMove);
       window.removeEventListener("mouseup", this.mouseUp);
@@ -386,7 +386,7 @@
       this.setupSymbolRadio();
       this.setupEmojiInput();
       this.setupImageInput();
-      await this.anchorManager.restore();
+      await this.anchorManager.loadAnchorsFromStorage();
     }
 
     setupLocalization() {
@@ -413,7 +413,7 @@
     setupExportButton() {
       document.querySelector(".export-button").addEventListener("click", async () => {
         try {
-          const anchors = this.anchorManager.currentAnchors();
+          const anchors = this.anchorManager.getAnchors();
           await this.settingsManager.exportSettings(anchors);
         } catch (error) {
           window.alert(`Export Error: ${error.message}`);
@@ -425,8 +425,8 @@
       document.querySelector(".import-button").addEventListener("click", async () => {
         try {
           const anchors = await this.settingsManager.importSettings();
-          this.anchorManager.appendAnchorItems(anchors);
-          await this.anchorManager.save();
+          this.anchorManager.renderAnchorElements(anchors);
+          await this.anchorManager.saveAnchorsToStorage();
         } catch (error) {
           window.alert(`Import Error: ${error.message}`);
         }
